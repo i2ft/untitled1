@@ -14,5 +14,7 @@ list detail form base html 생성
 
 url 연결
 
+모델작성
+
 
 

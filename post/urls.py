@@ -23,6 +23,6 @@ post_detail
 
 urlpatterns = [
     url(r'^create/$', post_create, name='create'),
-    url(r'^detail/$', post_detail, name='detail')
+    url(r'^detail/$', post_detail, name='detail'),
 
 ]
