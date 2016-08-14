@@ -10,8 +10,10 @@ from django.template import defaultfilters
 class Post(models.Model):
     title = models.CharField(max_length=40)
     content = models.TextField()
-    timestamp = models.TimeField(auto_now=True,auto_now_add=False)
-    updated = models.TimeField(auto_now=False,auto_now_add=True)
+    timestamp = models.DateTimeField(auto_now=True,auto_now_add=False)
+    start_date = models.DateField(auto_now=True)
+    start_time = models.TimeField(auto_now=True)
+    updated = models.DateTimeField(auto_now=False,auto_now_add=True)
     parent = models.CharField(blank=True,max_length=40,null=True)
 
     slug = models.SlugField(unique=True)
