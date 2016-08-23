@@ -25,7 +25,7 @@
 
 
 
-        max_dep= test();
+        max_dep= test(content_list);
         part =  cal_part(content_list);
         left_branch_number = part[0];
         right_branch_number = part[1];
@@ -139,21 +139,14 @@
 
 
 
-    function test() {
+    function test(content_list) {
         max_dep = 0;
-        i=0;
 
-        {% for obj in list %}
-
-            if({{ obj.dep }}>max_dep
-            ){
-            max_dep={{ obj.dep }}
-
+        for(i=0;i<content_list.length;i++){
+            if(max_dep<=content_list[i].fields.dep){
+                max_dep=content_list[i].fields.dep;
+            }
         }
-            i++;
-
-
-        {% endfor %}
         return max_dep;
 
     }
