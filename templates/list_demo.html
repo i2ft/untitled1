@@ -1,0 +1,190 @@
+{% load static %}
+<meta charset="utf-8">
+
+
+<link rel="stylesheet" href="{%   static 'src/mindmap.css' %}">
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+
+<script src="{%   static 'src/mindmap.js' %}"></script>
+
+
+
+
+<script>
+    $( document ).ready(function() {
+
+        $(document).on("click",".node",function(){
+            location.replace("/"+$(this).children(".node__text").text()+"__");
+
+        });
+
+
+        var content_list = {{ data|safe }};
+
+
+
+
+        max_dep= test();
+        part =  cal_part(content_list);
+        left_branch_number = part[0];
+        right_branch_number = part[1];
+        set_left_branch(left_branch_number,content_list);
+        set_right_branch(left_branch_number,content_list);
+
+
+    });
+
+    function set_left_branch(left_branch_number,content_list) {
+        current_dep=0;
+        templist = [];
+        for(i=0;i<left_branch_number;i++){
+            if(content_list[i].fields.dep==0){
+                templist.push(content_list[i].fields.title);
+                text = '<li class="'+content_list[i].fields.title+' children__item"> <div class="node"> <div class="node__text">'+content_list[i].fields.title+'</div> </div> </li>'
+                $(".children.children_leftbranch").append(text);
+            }}
+
+
+        if(current_dep<=max_dep){
+            make_children(templist,content_list,current_dep+1);
+
+        }
+
+    }
+
+    function set_right_branch(min,content_list) {
+        current_dep=0;
+        templist = [];
+
+        for(i=min;i<content_list.length;i++){
+            if(content_list[i].fields.dep==0){
+                templist.push(content_list[i].fields.title);
+                $(".children.children_rightbranch").append('<li class="'+content_list[i].fields.title+' children__item"> <div class="node"> <div class="node__text">'+content_list[i].fields.title+'</div> </div> </li>');
+                min++;
+            }}
+
+        if(current_dep<=max_dep){
+            make_children(templist,content_list,current_dep+1);
+
+        }
+
+    }
+
+    function set_ol_children(targetclass,parent_name) {
+        text_index = '<ol class="'+parent_name+' children"> </ol>';
+        $(targetclass).append(text_index);
+
+    }
+
+
+    function make_children(templist,content_list,current_dep) {
+        current_push_item_list = [];
+        is_set_ol_childern =0;
+
+        for(i=0;i<templist.length;i++){
+
+            for(z=0;z<content_list.length;z++){
+
+
+                if(content_list[z].fields.parent==templist[i]&&(content_list[z].fields.dep==current_dep)){
+
+
+                    if(is_set_ol_childern==0){
+
+                        set_ol_children('.'+templist[i]+'.children__item',templist[i]);
+                        is_set_ol_childern=1;
+                    }
+                    current_push_item_list.push(content_list[z].fields.title);
+                    target_class =templist[i]+'.children';
+                    set_content_index ='<li class="'+content_list[z].fields.title+' children__item"> <div class="node"> <div class="node__text">'+content_list[z].fields.title+'</div> </div> </li>'
+                    $('.'+target_class).append(set_content_index);
+
+
+
+                }
+            }
+            is_set_ol_childern=0;
+
+
+        }
+        if(current_dep<=max_dep){
+            make_children(current_push_item_list,content_list,current_dep+1);
+        }
+
+    }
+
+
+
+
+
+
+
+    function cal_part(content_list) {
+        z= 0;
+        for(i=0;i<content_list.length;i++){
+            if(content_list[i].fields.dep==0){
+                z++;
+            }
+        }
+        var a=z/2;
+        if((a-Math.floor(a)) > 0){
+            return [Math.ceil(a),Math.floor(a)]
+
+        }else{
+            return [Math.floor(a),Math.floor(a)]
+        }
+
+    }
+
+
+
+    function test() {
+        max_dep = 0;
+        i=0;
+
+        {% for obj in list %}
+
+            if({{ obj.dep }}>max_dep
+            ){
+            max_dep={{ obj.dep }}
+
+        }
+            i++;
+
+
+        {% endfor %}
+        return max_dep;
+
+    }
+
+
+
+
+
+</script>
+
+<div class="mindmap">
+
+    <ol class="children children_leftbranch">
+
+    </ol>
+    <div class="node node_root">
+        <div class="node__text">main</div>
+    </div>
+
+
+    <ol class="children children_rightbranch">
+
+
+    </ol>
+
+
+
+
+
+
+</div>
+
+
+
