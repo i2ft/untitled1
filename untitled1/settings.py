@@ -28,6 +28,8 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -39,7 +41,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'post',
     'channels',
+    'markdownx',
+    'crispy_forms',
 ]
+
+CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -122,9 +128,51 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+    #'/var/www/static/',
+]
+
+STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static_cdn")
+MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "media_cdn")
+
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "asgiref.inmemory.ChannelLayer",
         "ROUTING": "untitled1.routing.channel_routing",
     },
 }
+
+
+# Markdownify
+MARKDOWNX_MARKDOWNIFY_FUNCTION = 'markdownx.utils.markdownify' # Default function that compiles markdown using defined extensions. Using custom function can allow you to pre-process or post-process markdown text. See below for more info.
+
+# Markdown extensions
+MARKDOWNX_MARKDOWN_EXTENSIONS = [
+      'markdown.extensions.extra',
+    'markdown.extensions.nl2br',
+    'markdown.extensions.smarty',
+    'markdown.extensions.fenced_code',
+    'markdown.extensions.sane_lists',
+
+
+
+
+
+] # List of used markdown extensions. See below for more info.
+MARKDOWNX_MARKDOWN_EXTENSION_CONFIGS = {} # Configuration object for used markdown extensions
+
+# Markdown urls
+MARKDOWNX_URLS_PATH = '/markdownx/markdownify/' # URL that returns compiled markdown text.
+MARKDOWNX_UPLOAD_URLS_PATH = '/markdownx/upload/' # URL that accepts file uploads, returns markdown notation of the image.
+
+# Media path
+MARKDOWNX_MEDIA_PATH = 'markdownx/' # Path, where images will be stored in MEDIA_ROOT folder
+
+# Image
+MARKDOWNX_UPLOAD_MAX_SIZE = 52428800 # 50MB - maximum file size
+MARKDOWNX_UPLOAD_CONTENT_TYPES = ['image/jpeg', 'image/png'] # Acceptable file content types
+MARKDOWNX_IMAGE_MAX_SIZE = {'size': (500, 500), 'quality': 90,} # Different options describing final image processing: size, compression etc. See below for more info.
+
+# Editor
+MARKDOWNX_EDITOR_RESIZABLE = True # Update editor's height to inner content height while typing

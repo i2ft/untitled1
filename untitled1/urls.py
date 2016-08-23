@@ -19,7 +19,8 @@ from post.views import (post_list,
 post_detail,
 post_create,
 post_delete,
-post_update
+post_update,
+mind_map,
                         )
 
 
@@ -27,8 +28,11 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$',post_list,name='list'),
     url(r'^create/$',post_create,name='create'),
+    url(r'^mind/$',mind_map,name='map'),
     url(r'^(?P<slug>[\w-]+)/$', post_detail, name='detail'),
     url(r'^(?P<slug>[\w-]+)/edit/$', post_update, name='update'),
     url(r'^(?P<slug>[\w-]+)/delete/$', post_delete),
+    url(r'^markdownx/', include('markdownx.urls')),
+
 
 ]

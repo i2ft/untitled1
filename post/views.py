@@ -2,6 +2,8 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .form import PostForm
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from .models import Post
+from .service import setDep
+from django.core import serializers
 
 # Create your views here.
 def post_update(request, slug=None):
@@ -53,12 +55,27 @@ def post_detail(request, slug=None):
 	return render(request, "detail.html", context)
 
 
+
+def mind_map(request):
+	queryset_list = Post.objects.all()
+	data = serializers.serialize("json", queryset_list)
+
+	context = {
+		"data":data,
+
+	}
+	return render(request,"list_demo.html",context);
+
+
+
+
+
 def post_create(request):
     form = PostForm(request.POST or None, request.FILES or None)
     if form.is_valid():
         instance = form.save(commit=False)
-
-        instance.user = request.user
+        if (form.cleaned_data["parent"]!="NULL"):
+            setDep(instance)
         instance.save()
         # message success
         #messages.success(request, "Successfully Created")
