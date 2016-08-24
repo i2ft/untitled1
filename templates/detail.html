@@ -3,6 +3,6 @@
 
 {% block content %}
 {{ title }}<br>
-    {{ instance }}<br>
-    {{ share_string }}<br>
+    <div class='post-detail-item'>{{ instance.get_markdown }}</div>
+
 {% endblock content %}
