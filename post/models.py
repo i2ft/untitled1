@@ -3,6 +3,8 @@ from django.db.models.signals import pre_save
 from django.utils.text import slugify
 from django.core.urlresolvers import reverse
 from markdownx.models import MarkdownxField
+from markdown_deux import markdown
+from django.utils.safestring import mark_safe
 
 
 
@@ -31,8 +33,15 @@ class Post(models.Model):
     def get_absolute_url(self):
         return reverse("detail", kwargs={"slug": self.slug})
 
+    def get_markdown(self):
+        content = self.content
+        markdown_text = markdown(content)
+        return mark_safe(markdown_text)
+
     class Meta:
         ordering = ["-timestamp", "-updated"]
+
+
 
 
 
