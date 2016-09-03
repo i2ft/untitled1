@@ -1,6 +1,7 @@
 from django import forms
 
-from pagedown.widgets import PagedownWidget
+
+from markdownx.fields import MarkdownxFormField
 from .models import Post
 
 
@@ -11,4 +12,5 @@ class PostForm(forms.ModelForm):
         fields = [
             "title",
             "content",
+            "parent",
         ]
